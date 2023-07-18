@@ -5,6 +5,7 @@ import DnDList
 import Home exposing (onPointerMove, onPointerUp, releasePointerCapture)
 import Html
 import Html.Attributes
+import Html.Events
 import Json.Encode
 
 
@@ -44,9 +45,14 @@ config =
     }
 
 
+noOpPort : (Json.Encode.Value -> msg) -> Sub msg
+noOpPort _ =
+    Sub.none
+
+
 system : DnDList.System Fruit Msg
 system =
-    DnDList.createWithTouch config MyMsg onPointerMove onPointerUp releasePointerCapture
+    DnDList.createWithTouch config MyMsg noOpPort noOpPort releasePointerCapture
 
 
 
@@ -110,6 +116,11 @@ view model =
     Html.section
         [ Html.Attributes.style "text-align" "center"
         , Html.Attributes.style "touch-action" "none"
+        , Html.Events.on "pointermove" system.onPointerMove
+        , Html.Events.on "pointerup" system.onPointerUp
+
+        -- pointer capture hack to continue "globally" the event anywhere on document.
+        -- , Html.Attributes.attribute "onpointerdown" "event.target.setPointerCapture(event.pointerId);"
         ]
         [ model.items
             |> List.indexedMap (itemView model.dnd)
