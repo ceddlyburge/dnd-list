@@ -79,6 +79,10 @@ type alias Info =
     }
 ```
 
+### Mobile
+
+For drag and drop to work on mobile, use (Html.Attributes.style "touch-action" "none").
+
 ## Real Projects
 
 - [Risk Register](https://marketplace.atlassian.com/apps/1213146/risk-register?hosting=server&tab=overview) by ProjectBalm is a risk management add-on for Atlassian Jira.  
